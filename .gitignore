@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.netlify/
+
+# Local source materials and large media assets are not part of the web app bundle.
+个人网站素材/
+。/
