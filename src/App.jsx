@@ -1,646 +1,647 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import {
-  ArrowDownToLine,
   ArrowUpRight,
-  Bot,
-  Braces,
-  Check,
-  Copy,
+  Download,
   ExternalLink,
   Film,
-  Github,
-  Image as ImageIcon,
-  Maximize2,
-  Network,
-  Play,
-  PlayCircle,
-  Sparkles,
-  TerminalSquare,
-  WandSparkles,
+  Gamepad2,
+  Mail,
+  Map,
+  MonitorPlay,
   X,
 } from 'lucide-react';
 
-const navItems = [
-  { href: '#hero', label: 'Hero' },
-  { href: '#mini-series', label: 'Mini-Series' },
-  { href: '#gallery', label: 'Gallery' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#workflows', label: 'Workflows' },
-  { href: '#vibe-coding', label: 'Vibe-Coding' },
-];
+import dramaOne from './assets/01-ai-drama/videos/ai-drama-sample-01.mp4';
+import dramaTwo from './assets/01-ai-drama/videos/ai-drama-sample-02.mp4';
+import dramaThree from './assets/01-ai-drama/videos/ai-drama-sample-03.mp4';
+import platformDemo from './assets/05-video-platform/videos/video-platform-demo-web.mp4';
+import workflowDemo from './assets/03-workflow/videos/介绍视频.mp4';
+import capabilityMapImage from './assets/capability-map/obsidian-relationship-graph.png';
+import skillDemo from './assets/04-skills/script-image-search/videos/skill-demo-web.mp4';
+import skillDownload from './assets/04-skills/script-image-search/downloads/script-image-search.zip?url';
+import skillOverview from './assets/04-skills/script-image-search/images/skill-overview.png';
+import githubSkillDownload from './assets/04-skills/github-skill-cn-import/downloads/github-skill-cn-import.zip?url';
+import githubSkillOverview from './assets/04-skills/github-skill-cn-import/images/github-skill-cn-import.png';
+import socraticSkillDownload from './assets/04-skills/socratic-learning-engine/downloads/socratic-learning-engine.zip?url';
+import socraticSkillOverview from './assets/04-skills/socratic-learning-engine/images/socratic-learning-engine-overview.png';
+import { gallery, sections, waveformBars } from './data/portfolio';
 
-const series = [
-  {
-    title: '霓虹孤岛计划',
-    tags: ['生成视频', 'AI配乐', '数字人'],
-    poster:
-      'https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=900&q=85',
-    outline:
-      '一名记忆修复师进入废弃海上数据城，为最后一位数字居民寻找被删除的童年片段。',
-    direction:
-      '整体采用低饱和黑蓝基底与高亮霓虹边缘光，让城市像一台仍在呼吸的旧服务器。',
-    tools: ['Runway Gen-3', 'Kling', 'ElevenLabs', 'Suno', 'DaVinci Resolve'],
-  },
-  {
-    title: '月面快递员',
-    tags: ['AI分镜', '虚拟摄影', '音效设计'],
-    poster:
-      'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=900&q=85',
-    outline:
-      '近未来月球殖民地里，一名快递员在一次异常投递中发现了城市调度系统的秘密。',
-    direction:
-      '镜头语言靠近纪录片式跟拍，用真实工业质感削弱科幻设定的距离感。',
-    tools: ['Midjourney', 'ComfyUI', 'Luma', 'Premiere Pro', 'Audition'],
-  },
-  {
-    title: '第七码头',
-    tags: ['数字人', 'AI旁白', '概念预演'],
-    poster:
-      'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=85',
-    outline:
-      '一座只在雨夜出现的码头连接着现实与训练数据，主角必须选择保留哪一种身份。',
-    direction:
-      '以湿润反光、长焦压缩和慢速推进构建悬疑感，让空间本身成为叙事角色。',
-    tools: ['Stable Diffusion XL', 'AnimateDiff', 'HeyGen', 'After Effects', 'Resolve'],
-  },
-];
-
-const galleryItems = [
-  {
-    title: '雨夜数据街区',
-    category: '赛博朋克',
-    ratio: 'aspect-[16/9]',
-    image:
-      'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1200&q=85',
-    prompt: '霓虹雨夜、湿润街面反射、巨型广告屏、电影级构图、蓝紫色边缘光',
-  },
-  {
-    title: '仿生人肖像测试',
-    category: '写实人像',
-    ratio: 'aspect-[9/16]',
-    image:
-      'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=85',
-    prompt: '写实人像、冷色棚拍、皮肤微瑕疵、透明机械纹理、浅景深',
-  },
-  {
-    title: '深空栖居舱',
-    category: '概念美术',
-    ratio: 'aspect-square',
-    image:
-      'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1000&q=85',
-    prompt: '深空居住舱、环形窗、漂浮尘埃、极简内饰、孤独感叙事',
-  },
-  {
-    title: '玻璃神经花园',
-    category: '概念美术',
-    ratio: 'aspect-[16/9]',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85',
-    prompt: '玻璃温室、神经网络结构、冷雾、发光植物、未来生态实验室',
-  },
-  {
-    title: '夜行机甲巡逻',
-    category: '赛博朋克',
-    ratio: 'aspect-[9/16]',
-    image:
-      'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=900&q=85',
-    prompt: '重型机甲、城市巡逻、雨雾、背光剪影、硬表面细节',
-  },
-  {
-    title: '银色导演侧影',
-    category: '写实人像',
-    ratio: 'aspect-square',
-    image:
-      'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=1000&q=85',
-    prompt: '写实侧脸、银色轮廓光、黑色背景、电影导演气质、85mm镜头',
-  },
-];
-
-const skills = [
-  {
-    icon: Bot,
-    name: '小说转分镜智能体',
-    pain: '一键小说转剧本分镜：自动提取结构，输出标准分镜表。',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=85',
-  },
-  {
-    icon: WandSparkles,
-    name: '角色一致性微技能',
-    pain: '把人物设定、姿态参考与镜头提示词合并成可复用角色包。',
-    image:
-      'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1200&q=85',
-  },
-  {
-    icon: Braces,
-    name: 'Prompt 清洗与版本管理',
-    pain: '自动整理提示词变量，记录风格版本，减少多人协作返工。',
-    image:
-      'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=85',
-  },
-];
-
-const vibeApps = [
-  {
-    name: '镜头节奏计算器',
-    image:
-      'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=85',
-    story:
-      '我先对 AI 说“帮我把拖延症剪辑师变成节奏管理大师”，它回了一个表格。我不服，继续用自然语言怼出时间线、节拍点和情绪曲线，二十分钟后，一个能算镜头呼吸感的小工具就站起来了。',
-  },
-  {
-    name: 'Prompt 黑匣子',
-    image:
-      'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=85',
-    story:
-      '从一句“我要一个不装腔的提示词保险柜”开始，边聊天边把收藏、标签、复制、评分揉成一个夜间工作台。它不负责显得聪明，只负责在凌晨两点救回我的灵感。',
-  },
-  {
-    name: 'AI 分镜便利贴',
-    image:
-      'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85',
-    story:
-      '没有原型图，没有需求文档，只有一句“像便利贴一样排镜头”。于是我和 AI 一来一回，把拖拽排序、画幅备注、镜头状态都聊出来，像在桌面上搭一部微型电影。',
-  },
-];
-
-const categories = ['全部', '赛博朋克', '写实人像', '概念美术'];
+const reveal = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0 },
+};
 
 function App() {
-  const [activeSeries, setActiveSeries] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('全部');
-  const [copiedPrompt, setCopiedPrompt] = useState('');
-  const [workflowOpen, setWorkflowOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('visual');
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const filteredGallery = useMemo(() => {
-    if (activeCategory === '全部') return galleryItems;
-    return galleryItems.filter((item) => item.category === activeCategory);
-  }, [activeCategory]);
-
-  const copyPrompt = async (prompt) => {
-    try {
-      await navigator.clipboard.writeText(prompt);
-    } catch {
-      const textarea = document.createElement('textarea');
-      textarea.value = prompt;
-      textarea.setAttribute('readonly', '');
-      textarea.style.position = 'fixed';
-      textarea.style.left = '-9999px';
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    }
-    setCopiedPrompt(prompt);
-    window.setTimeout(() => setCopiedPrompt(''), 1200);
-  };
-
-  const downloadConfig = () => {
-    const blob = new Blob(
-      [
-        JSON.stringify(
-          {
-            workflow: 'ComfyUI cinematic short-film pipeline',
-            stages: ['脚本拆解', '角色锁定', 'ControlNet 构图', '视频生成', '超分调色', '质检归档'],
-            tools: ['ComfyUI', 'Dify', 'SDXL', 'AnimateDiff', 'Runway', 'DaVinci Resolve'],
-          },
-          null,
-          2,
-        ),
-      ],
-      { type: 'application/json' },
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: '-28% 0px -58% 0px', threshold: [0.05, 0.25, 0.5] },
     );
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'ai-workflow-config.json';
-    link.click();
-    URL.revokeObjectURL(url);
-  };
+
+    sections.forEach(({ id }) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#0A0014] text-white">
-      <div className="crt-overlay pointer-events-none fixed inset-0 z-50" />
-      <Navbar />
-      <Hero />
-      <MiniSeries onOpen={setActiveSeries} />
-      <Gallery
-        activeCategory={activeCategory}
-        filteredGallery={filteredGallery}
-        onCategory={setActiveCategory}
-        onCopy={copyPrompt}
-        copiedPrompt={copiedPrompt}
-      />
-      <Skills />
-      <Workflows onZoom={() => setWorkflowOpen(true)} onDownload={downloadConfig} />
-      <VibeCoding />
-      <Footer />
-      {activeSeries && <SeriesModal series={activeSeries} onClose={() => setActiveSeries(null)} />}
-      {workflowOpen && <WorkflowModal onClose={() => setWorkflowOpen(false)} />}
+    <main>
+      <ScrollProgress />
+      <AmbientCursor />
+      <Header activeSection={activeSection} />
+      <SectionRail activeSection={activeSection} />
+
+      <div className="site-shell">
+        <Hero />
+        <VisualWork onSelectImage={setSelectedImage} />
+        <ProductWork />
+        <GamesWork />
+        <CapabilityWork />
+        <Contact />
+      </div>
+
+      <AnimatePresence>
+        {selectedImage && <ImageDialog image={selectedImage} onClose={() => setSelectedImage(null)} />}
+      </AnimatePresence>
     </main>
   );
 }
 
-function Navbar() {
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 180, damping: 30, mass: 0.2 });
+  return <motion.div className="scroll-progress" style={{ scaleX }} />;
+}
+
+function AmbientCursor() {
+  useEffect(() => {
+    if (window.matchMedia('(pointer: coarse)').matches) return undefined;
+
+    const onPointerMove = (event) => {
+      document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`);
+      document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`);
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onPointerMove);
+  }, []);
+
+  return <div className="ambient-cursor" aria-hidden="true" />;
+}
+
+function Header({ activeSection }) {
   return (
-    <header className="fixed left-0 right-0 top-0 z-40 border-b border-cyan-300/10 bg-[#0A0014]/70 backdrop-blur-2xl">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="#hero" className="group flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-xl border border-cyan-300/30 bg-cyan-300/10 shadow-[0_0_24px_rgba(0,255,255,.18)]">
-            <Sparkles className="h-4 w-4 text-cyan-200" />
-          </span>
-          <span className="font-display text-sm font-semibold uppercase tracking-[0.28em] text-white">
-            AI Creator
-          </span>
-        </a>
-        <div className="hidden items-center gap-1 lg:flex">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="rounded-full px-4 py-2 text-sm text-slate-300 transition-all duration-300 hover:bg-white/10 hover:text-white"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
+    <header className="topbar">
+      <a className="brand" href="#opening" aria-label="返回首页">
+        <span className="brand-mark">BY</span>
+        <span>白榆 / AIGC 创作</span>
+      </a>
+      <nav aria-label="主导航">
+        {sections.map((section) => (
+          <a
+            key={section.id}
+            className={activeSection === section.id ? 'is-active' : ''}
+            href={`#${section.id}`}
+            aria-current={activeSection === section.id ? 'location' : undefined}
+          >
+            {section.label}
+          </a>
+        ))}
       </nav>
     </header>
   );
 }
 
-function Hero() {
+function SectionRail({ activeSection }) {
   return (
-    <section id="hero" className="relative min-h-screen overflow-hidden">
-      <video
-        className="absolute inset-0 h-full w-full object-cover opacity-50"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1800&q=85"
-      >
-        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
-      </video>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(0,255,255,.22),transparent_28rem),radial-gradient(circle_at_25%_65%,rgba(255,0,110,.22),transparent_30rem),linear-gradient(90deg,rgba(10,0,20,.92),rgba(10,0,20,.72),rgba(10,0,20,.92))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,0,20,.18),#0A0014_96%)]" />
-
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center px-4 pt-20 sm:px-6 lg:px-8">
-        <div className="max-w-4xl">
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 shadow-[0_0_28px_rgba(0,255,255,.14)]">
-            <PlayCircle className="h-4 w-4" />
-            AI Workflow Architect / Digital Story Director
-          </p>
-          <h1 className="glitch-title max-w-5xl font-display text-5xl font-black leading-[0.92] tracking-normal sm:text-7xl lg:text-8xl">
-            Merging AI with Creativity.
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-200 sm:text-xl">
-            I build automated workflows, code by vibe, and direct digital stories. Pushing the
-            boundaries of Next-Gen AI content creation.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <a
-              href="#mini-series"
-              className="inline-flex items-center gap-2 rounded-full bg-cyan-300 px-6 py-3 text-sm font-bold text-[#0A0014] shadow-[0_0_34px_rgba(0,255,255,.35)] transition-all duration-300 hover:scale-105 hover:bg-white"
-            >
-              Explore Work
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-            <a
-              href="mailto:hello@example.com"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur transition-all duration-300 hover:scale-105 hover:border-fuchsia-300/70 hover:bg-fuchsia-400/10"
-            >
-              Contact Me
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Section({ id, icon: Icon, title, intro, children }) {
-  return (
-    <section id={id} className="relative px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-10 max-w-3xl">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-white/[0.04] px-4 py-2 text-sm text-cyan-100 backdrop-blur">
-            <Icon className="h-4 w-4" />
-            {title}
-          </div>
-          <h2 className="font-display text-3xl font-bold tracking-normal text-white sm:text-5xl">{title}</h2>
-          {intro && <p className="mt-4 text-base leading-8 text-slate-300 sm:text-lg">{intro}</p>}
-        </div>
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function MiniSeries({ onOpen }) {
-  return (
-    <Section
-      id="mini-series"
-      icon={Film}
-      title="AI 短剧作品集"
-      intro="用生成视频、虚拟摄影和自动化后期，把短剧创意从一句灵感推进到可交付样片。"
-    >
-      <div className="grid gap-6 md:grid-cols-3">
-        {series.map((item) => (
-          <button
-            key={item.title}
-            onClick={() => onOpen(item)}
-            className="neon-card group relative aspect-[2/3] overflow-hidden rounded-lg text-left"
-          >
-            <img
-              src={item.poster}
-              alt={item.title}
-              className="h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
-              <span className="grid h-16 w-16 place-items-center rounded-full border border-cyan-200/50 bg-cyan-300/15 backdrop-blur-xl shadow-[0_0_34px_rgba(0,255,255,.32)]">
-                <Play className="h-7 w-7 fill-white text-white" />
-              </span>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <h3 className="text-2xl font-bold text-white">{item.title}</h3>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-slate-100 backdrop-blur">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function SeriesModal({ series: item, onClose }) {
-  return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur-2xl">
-      <div className="max-h-[92vh] w-full max-w-5xl overflow-auto rounded-lg border border-cyan-300/20 bg-[#0A0014] shadow-[0_0_80px_rgba(0,255,255,.16)]">
-        <div className="flex items-center justify-between border-b border-white/10 p-5">
-          <h3 className="text-2xl font-bold">{item.title}</h3>
-          <button onClick={onClose} className="rounded-full border border-white/15 p-2 transition hover:bg-white/10" aria-label="关闭短剧详情">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="grid gap-6 p-5 lg:grid-cols-[1.2fr_.8fr]">
-          <div className="aspect-video overflow-hidden rounded-lg border border-white/10 bg-black">
-            <video
-              className="h-full w-full object-cover"
-              controls
-              poster={item.poster}
-              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-          </div>
-          <div className="space-y-5">
-            <InfoBlock title="剧本大纲" text={item.outline} />
-            <InfoBlock title="导演构思" text={item.direction} />
-            <div>
-              <h4 className="mb-3 text-sm font-bold text-cyan-100">AI工具链列表</h4>
-              <div className="flex flex-wrap gap-2">
-                {item.tools.map((tool) => (
-                  <span key={tool} className="rounded-full border border-fuchsia-300/20 bg-fuchsia-400/10 px-3 py-1 text-sm text-fuchsia-100">
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function InfoBlock({ title, text }) {
-  return (
-    <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
-      <h4 className="mb-2 text-sm font-bold text-cyan-100">{title}</h4>
-      <p className="text-sm leading-7 text-slate-300">{text}</p>
-    </div>
-  );
-}
-
-function Gallery({ activeCategory, filteredGallery, onCategory, onCopy, copiedPrompt }) {
-  return (
-    <Section
-      id="gallery"
-      icon={ImageIcon}
-      title="AI 概念艺术画廊"
-      intro="混合赛博城市、写实人物与概念美术，用不同画幅展示可控生成的视觉边界。"
-    >
-      <div className="mb-7 flex flex-wrap gap-3">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => onCategory(category)}
-            className={`rounded-full border px-4 py-2 text-sm transition-all duration-300 ${
-              activeCategory === category
-                ? 'border-cyan-200 bg-cyan-300 text-[#0A0014]'
-                : 'border-white/15 bg-white/[0.04] text-slate-200 hover:border-cyan-200/60'
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-      <div className="masonry">
-        {filteredGallery.map((item) => (
-          <article key={item.title} className={`group relative mb-5 overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] ${item.ratio}`}>
-            <img src={item.image} alt={item.title} className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-60 transition group-hover:opacity-90" />
-            <button
-              onClick={() => onCopy(item.prompt)}
-              className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/40 text-white opacity-0 backdrop-blur transition-all duration-300 hover:bg-cyan-300 hover:text-[#0A0014] group-hover:opacity-100"
-              aria-label="复制 Prompt"
-            >
-              {copiedPrompt === item.prompt ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            </button>
-            <div className="absolute bottom-0 left-0 right-0 translate-y-3 p-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-              <h3 className="text-xl font-bold">{item.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-200">画面灵感与核心提示词：{item.prompt}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function Skills() {
-  return (
-    <Section
-      id="skills"
-      icon={Bot}
-      title="AI 智能体与微技能"
-      intro="把高频创作痛点封装成可调用的微技能，让灵感、提示词、分镜和交付流程持续复用。"
-    >
-      <div className="grid gap-6 lg:grid-cols-3">
-        {skills.map((skill) => {
-          const Icon = skill.icon;
-          return (
-            <article key={skill.name} className="neon-card rounded-lg p-5">
-              <div className="mb-5 flex items-center gap-4">
-                <span className="grid h-12 w-12 place-items-center rounded-lg border border-cyan-300/20 bg-cyan-300/10">
-                  <Icon className="h-5 w-5 text-cyan-100" />
-                </span>
-                <h3 className="text-xl font-bold">{skill.name}</h3>
-              </div>
-              <p className="min-h-14 text-sm leading-7 text-slate-300">{skill.pain}</p>
-              <div className="mt-5 aspect-video overflow-hidden rounded-lg border border-white/10 bg-black">
-                <img src={skill.image} alt={skill.name} className="h-full w-full object-cover opacity-80 transition duration-500 hover:scale-105" />
-              </div>
-              <button className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#0A0014] transition hover:bg-cyan-200">
-                立即体验 / 复制提示词
-                <Copy className="h-4 w-4" />
-              </button>
-            </article>
-          );
-        })}
-      </div>
-    </Section>
-  );
-}
-
-function Workflows({ onZoom, onDownload }) {
-  return (
-    <Section
-      id="workflows"
-      icon={Network}
-      title="AI 自动化工作流解析"
-      intro="把灵感拆成输入、控制、生成、质检与交付节点，让复杂创意生产变成可复盘的系统。"
-    >
-      <div className="grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
-        <div className="neon-card overflow-hidden rounded-lg">
-          <div className="relative aspect-[16/10] bg-[#050812] p-5">
-            <WorkflowDiagram />
-            <button
-              onClick={onZoom}
-              className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-sm backdrop-blur transition hover:bg-white/10"
-            >
-              <Maximize2 className="h-4 w-4" />
-              放大查看
-            </button>
-          </div>
-        </div>
-        <div className="space-y-5">
-          <InfoBlock title="攻坚难点" text="难点不是生成一张好看的图，而是在多镜头、多角色、多工具之间保持构图、人物、色彩与叙事节奏的一致性。" />
-          <InfoBlock title="核心逻辑" text="用 Dify 负责脚本拆解与提示词编排，用 ComfyUI 管理角色锁定、ControlNet 约束、批量出图与后期超分，再进入剪辑质检。" />
-          <div className="aspect-video overflow-hidden rounded-lg border border-white/10 bg-black">
-            <video
-              className="h-full w-full object-cover opacity-80"
-              controls
-              poster="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=85"
-              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-          </div>
-          <button
-            onClick={onDownload}
-            className="inline-flex items-center gap-2 rounded-full bg-fuchsia-400 px-5 py-3 text-sm font-bold text-[#0A0014] transition hover:scale-105 hover:bg-cyan-300"
-          >
-            下载配置文件 (JSON)
-            <ArrowDownToLine className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-function WorkflowDiagram() {
-  const nodes = [
-    { label: '脚本拆解', x: '7%', y: '20%' },
-    { label: '角色锁定', x: '32%', y: '12%' },
-    { label: '构图控制', x: '31%', y: '48%' },
-    { label: '视频生成', x: '58%', y: '30%' },
-    { label: '超分调色', x: '76%', y: '58%' },
-  ];
-  return (
-    <div className="relative h-full w-full overflow-hidden rounded-lg border border-cyan-300/10 bg-[linear-gradient(rgba(0,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,110,.06)_1px,transparent_1px)] bg-[length:34px_34px]">
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 560" preserveAspectRatio="none">
-        <path className="flow-line" d="M120 150 C260 90 310 95 395 105 C495 120 540 190 620 210 C720 240 760 300 830 360" />
-        <path className="flow-line delay" d="M130 160 C250 260 330 290 410 310 C520 335 590 280 650 225" />
-        <path className="flow-line" d="M415 318 C520 400 620 430 820 365" />
-      </svg>
-      {nodes.map((node) => (
-        <div
-          key={node.label}
-          className="absolute w-32 rounded-lg border border-cyan-300/25 bg-[#0A0014]/90 p-3 text-center text-sm font-bold shadow-[0_0_28px_rgba(0,255,255,.14)] backdrop-blur"
-          style={{ left: node.x, top: node.y }}
+    <aside className="section-rail" aria-label="章节进度">
+      <span className="rail-title">INDEX</span>
+      <div className="rail-line" />
+      {sections.map((section) => (
+        <a
+          key={section.id}
+          className={activeSection === section.id ? 'rail-item is-active' : 'rail-item'}
+          href={`#${section.id}`}
+          aria-label={`${section.number} ${section.label}`}
         >
-          {node.label}
-        </div>
+          <span>{section.number}</span>
+          <b>{section.label}</b>
+        </a>
       ))}
-      <div className="absolute bottom-4 left-4 right-4 rounded-lg border border-white/10 bg-black/35 p-3 text-sm text-slate-300 backdrop-blur">
-        ComfyUI / Dify 工作流架构图占位：节点、分支、回流与质检门禁共同定义生产节奏。
-      </div>
-    </div>
+    </aside>
   );
 }
 
-function WorkflowModal({ onClose }) {
-  return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4 backdrop-blur-2xl">
-      <div className="w-full max-w-6xl rounded-lg border border-cyan-300/20 bg-[#050812] p-4 shadow-[0_0_90px_rgba(0,255,255,.18)]">
-        <div className="mb-4 flex justify-end">
-          <button onClick={onClose} className="rounded-full border border-white/15 p-2 transition hover:bg-white/10" aria-label="关闭工作流大图">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="h-[72vh]">
-          <WorkflowDiagram />
-        </div>
-      </div>
-    </div>
-  );
-}
+function Hero() {
+  const { scrollYProgress } = useScroll();
+  const stageY = useSpring(useTransform(scrollYProgress, [0, 0.32], [0, -128]), {
+    stiffness: 90,
+    damping: 24,
+    mass: 0.35,
+  });
 
-function VibeCoding() {
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    event.currentTarget.style.setProperty('--scene-x', `${x * 16}deg`);
+    event.currentTarget.style.setProperty('--scene-y', `${y * -12}deg`);
+    event.currentTarget.style.setProperty('--pointer-x', `${(x + 0.5) * 100}%`);
+    event.currentTarget.style.setProperty('--pointer-y', `${(y + 0.5) * 100}%`);
+  };
+
+  const resetPointer = (event) => {
+    event.currentTarget.style.setProperty('--scene-x', '0deg');
+    event.currentTarget.style.setProperty('--scene-y', '0deg');
+  };
+
   return (
-    <Section
-      id="vibe-coding"
-      icon={TerminalSquare}
-      title="Vibe Coding 独立开发实验室"
-      intro="不从需求文档开始，而从一句带情绪的自然语言开始，用聊天把应用一点点揉成形。"
+    <section
+      id="opening"
+      className="hero"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetPointer}
     >
-      <div className="grid gap-6 lg:grid-cols-3">
-        {vibeApps.map((app, index) => (
-          <article key={app.name} className={`neon-card rounded-lg p-5 ${index === 1 ? 'lg:mt-12' : ''}`}>
-            <div className="aspect-[4/3] overflow-hidden rounded-lg border border-white/10">
-              <img src={app.image} alt={app.name} className="h-full w-full object-cover opacity-85 transition duration-500 hover:scale-105" />
+      <div className="hero-micro hero-micro-left">SELECTED WORK / 2026</div>
+      <div className="hero-micro hero-micro-right">CREATIVE TECHNOLOGY · SHANGHAI</div>
+
+      <motion.div
+        className="hero-copy"
+        initial="hidden"
+        animate="show"
+        variants={reveal}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <p className="eyebrow">AIGC 创作 / 产品实现 / 工作流设计</p>
+        <h1>
+          <span>让想象</span>
+          <span>成为可运行的</span>
+          <em>数字体验。</em>
+        </h1>
+        <p className="hero-summary">
+          从 AI 影像、生成式视觉到产品原型与自动化工作流，
+          把一次灵感变成可体验、可交付、可复用的完整作品。
+        </p>
+        <div className="actions">
+          <a className="button button-solid" href="https://prompt-video-studio.netlify.app/" target="_blank" rel="noreferrer">
+            体验视频平台 <ArrowUpRight size={16} />
+          </a>
+          <a className="button" href="#visual">
+            查看作品 <Film size={16} />
+          </a>
+        </div>
+        <div className="hero-paths" aria-label="作品入口">
+          <a href="#visual" className="hero-path">
+            <span className="hero-path-number">01</span>
+            <span><strong>AI 视觉</strong><small>短剧 / 图片</small></span>
+            <ArrowUpRight size={15} />
+          </a>
+          <a href="#product" className="hero-path">
+            <span className="hero-path-number">02</span>
+            <span><strong>产品流程</strong><small>平台 / Coze 工作流</small></span>
+            <ArrowUpRight size={15} />
+          </a>
+          <a href="#games" className="hero-path">
+            <span className="hero-path-number">03</span>
+            <span><strong>互动作品</strong><small>网页游戏 / 竖屏玩法</small></span>
+            <ArrowUpRight size={15} />
+          </a>
+          <a href="#capability" className="hero-path">
+            <span className="hero-path-number">04</span>
+            <span><strong>能力资产</strong><small>能力地图 / Skill</small></span>
+            <ArrowUpRight size={15} />
+          </a>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="hero-stage"
+        style={{ y: stageY }}
+        initial={{ opacity: 0, scale: 0.94, rotate: -2 }}
+        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        transition={{ delay: 0.12, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        aria-hidden="true"
+      >
+        <div className="scene-wire scene-wire-a"><span /></div>
+        <div className="scene-wire scene-wire-b"><span /></div>
+        <div className="scene-wire scene-wire-c"><span /></div>
+        <div className="scene-crosshair" />
+        <div className="scene-note-mark"><span>THE NOTE</span><i /></div>
+        <div className="scene-editorial-title">The importance<br />of the right <em>workflow.</em></div>
+        <div className="scene-waveform">
+          {waveformBars.map((height, index) => <i key={`${height}-${index}`} style={{ '--bar-height': `${height}%` }} />)}
+        </div>
+        <div className="scene-orbit scene-orbit-outer" />
+        <div className="scene-orbit scene-orbit-inner" />
+        <div className="scene-dot scene-dot-a" />
+        <div className="scene-dot scene-dot-b" />
+        <div className="scene-dot scene-dot-c" />
+        <div className="scene-stone scene-stone-a" />
+        <div className="scene-stone scene-stone-b" />
+        <div className="scene-stone scene-stone-c" />
+        <div className="scene-sculpture">
+          <div className="scene-moon">
+            <span />
+          </div>
+          <div className="scene-phone">
+            <div className="phone-screen">
+              <span>AI</span>
+              <i />
             </div>
-            <h3 className="mt-5 text-2xl font-bold">{app.name}</h3>
-            <p className="mt-3 text-sm leading-7 text-slate-300">{app.story}</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a href="#hero" className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100 transition hover:bg-cyan-300 hover:text-[#0A0014]">
-                <ExternalLink className="h-4 w-4" />
-                在线运行 Demo
-              </a>
-              <a href="#hero" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm text-slate-100 transition hover:bg-white/10">
-                <Github className="h-4 w-4" />
-                查看代码 GitHub
-              </a>
-            </div>
-          </article>
+          </div>
+          <div className="scene-hand" />
+        </div>
+        <p className="scene-quote">“Turn ideas into<br />something people<br />can actually use.”</p>
+      </motion.div>
+
+      <motion.div
+        className="hero-proof"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.42, duration: 0.65 }}
+      >
+        <div className="proof-head">
+          <span>FEATURED / PROMPT VIDEO STUDIO</span>
+          <span className="status">LIVE ↗</span>
+        </div>
+        <div className="proof-stats">
+          <div><strong>29</strong><span>模型变体</span></div>
+          <div><strong>09</strong><span>创作工作流</span></div>
+          <div><strong>09</strong><span>自动化测试</span></div>
+        </div>
+      </motion.div>
+
+      <a className="scroll-cue" href="#visual">
+        <span>SCROLL TO EXPLORE</span>
+        <i />
+      </a>
+    </section>
+  );
+}
+
+function Chapter({ id, number, title, proof, icon: Icon, children, className = '' }) {
+  return (
+    <section id={id} className={`chapter chapter-${id} ${className}`.trim()}>
+      <motion.div
+        className="chapter-heading"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-100px' }}
+        variants={reveal}
+        transition={{ duration: 0.55 }}
+      >
+        <div className="chapter-number">{number}</div>
+        <div>
+          <p className="eyebrow"><Icon size={15} /> {title}</p>
+          <h2>{title}</h2>
+          <p>{proof}</p>
+        </div>
+      </motion.div>
+      {children}
+    </section>
+  );
+}
+
+function handleTiltMove(event) {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  const rect = event.currentTarget.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width - 0.5;
+  const y = (event.clientY - rect.top) / rect.height - 0.5;
+  event.currentTarget.style.setProperty('--tilt-x', `${y * -4}deg`);
+  event.currentTarget.style.setProperty('--tilt-y', `${x * 5}deg`);
+  event.currentTarget.style.setProperty('--tilt-shadow-x', `${x * 18}px`);
+  event.currentTarget.style.setProperty('--tilt-shadow-y', `${y * 18 + 12}px`);
+  event.currentTarget.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
+  event.currentTarget.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
+}
+
+function resetTilt(event) {
+  event.currentTarget.style.setProperty('--tilt-x', '0deg');
+  event.currentTarget.style.setProperty('--tilt-y', '0deg');
+  event.currentTarget.style.setProperty('--tilt-shadow-x', '0px');
+  event.currentTarget.style.setProperty('--tilt-shadow-y', '12px');
+  event.currentTarget.style.setProperty('--shine-x', '50%');
+  event.currentTarget.style.setProperty('--shine-y', '50%');
+}
+
+function ProjectCard({ id, number, eyebrow, title, body, details = [], video, href, linkLabel, tags, portrait = false, reverse = false }) {
+  return (
+    <article
+      id={id}
+      className={`project-card intro-3d-card ${portrait ? 'project-card-portrait' : ''} ${reverse ? 'project-card-reverse' : ''} ${video ? '' : 'project-card-no-media'}`}
+      onPointerMove={handleTiltMove}
+      onPointerLeave={resetTilt}
+    >
+      <span className="project-depth-index" aria-hidden="true">{number}</span>
+      <div className="project-copy">
+        <p className="case-index">{number} / {eyebrow}</p>
+        <h3>{title}</h3>
+        <p>{body}</p>
+        {details.length > 0 && (
+          <ul className="project-details">
+            {details.map((detail) => <li key={detail}>{detail}</li>)}
+          </ul>
+        )}
+        <div className="project-tags">
+          {tags.map((tag) => <span key={tag}>{tag}</span>)}
+        </div>
+        {href ? (
+          <a className="text-link" href={href} target="_blank" rel="noreferrer">
+            {linkLabel} <ExternalLink size={15} />
+          </a>
+        ) : <span className="link-placeholder">链接待补充</span>}
+      </div>
+      {video && <div className="project-media"><video controls playsInline preload="metadata" src={video} aria-label={`${title}视频介绍`} /></div>}
+    </article>
+  );
+}
+
+function VisualWork({ onSelectImage }) {
+  return (
+    <Chapter
+      id="visual"
+      number="01"
+      title="短剧与图片"
+      proof="用竖屏短剧和 AI 图片展示从角色、镜头到画面风格的持续控制与视觉交付。"
+      icon={Film}
+    >
+      <div className="visual-tools" aria-label="本章快速浏览">
+        <span>快速浏览</span>
+        <a href="#drama-work">短剧样片 <ArrowUpRight size={14} /></a>
+        <a href="#image-work">AI 图片 <ArrowUpRight size={14} /></a>
+      </div>
+      <div id="drama-work" className="subsection-heading">
+        <span>01.1</span><h3>AI 短剧</h3><p>以竖屏成片呈现镜头节奏、人物连续性与交付质量。</p>
+      </div>
+      <div className="drama-layout">
+        <DramaCard className="drama-primary" video={dramaOne} label="主短剧 / 9:16" title="AI 短剧样片 01" detail="I Died Before You Learned to Love Me" />
+        <DramaCard className="drama-secondary" video={dramaTwo} label="补充片段 / 9:16" title="AI 短剧样片 02" detail="The Playboy System - Wooing the Goddesses to Survive" />
+        <DramaCard className="drama-tertiary" video={dramaThree} label="完整案例 / 9:16" title="AI 短剧样片 03" detail="Project to Legend NEY 10" />
+        <div className="drama-notes">
+          <div><span>项目类型</span><b>AI 竖屏短剧</b></div>
+          <div><span>关注重点</span><b>角色、镜头、情绪</b></div>
+          <div><span>交付形式</span><b>9:16 成片</b></div>
+        </div>
+      </div>
+
+      <div id="image-work" className="subsection-heading image-heading">
+        <span>01.2</span><h3>AI 图片</h3><p>精选图片接触表；点击图片查看完整画面与说明。</p>
+      </div>
+      <div className="contact-sheet">
+        {gallery.map((image, index) => (
+          <button className="contact-frame" type="button" key={image.label} onClick={() => onSelectImage(image)}>
+            <img src={image.src} alt={`${image.label}：${image.note}`} loading={index > 3 ? 'lazy' : 'eager'} />
+            <span><b>{String(index + 1).padStart(2, '0')}</b>{image.note}</span>
+          </button>
         ))}
       </div>
-    </Section>
+      <div className="module-status">更多作品链接待补充</div>
+    </Chapter>
   );
 }
 
-function Footer() {
+function DramaCard({ className, video, label, title, detail }) {
   return (
-    <footer className="border-t border-white/10 px-4 py-10 text-center text-sm text-slate-500">
-      AI Creator Portfolio / 自动化工作流、AI 短剧、概念艺术与 Vibe Coding 实验集合
-    </footer>
+    <article className={`drama-card intro-3d-card ${className}`} onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
+      <div className="drama-caption"><span>{label}</span><h4>{title}</h4><p>{detail}</p></div>
+      <div className="drama-media">
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          src={video}
+          aria-label={`${title}视频播放器`}
+        />
+      </div>
+    </article>
+  );
+}
+
+function ProductWork() {
+  return (
+    <Chapter
+      id="product"
+      number="02"
+      title="产品与工作流"
+      proof="从可体验的生成平台，到可复用的内容生产链路：把创作能力组织成可运行、可交付的流程。"
+      icon={MonitorPlay}
+      className="chapter-product"
+    >
+      <div className="product-stack">
+        <div className="product-block" id="video-platform">
+          <div className="subsection-heading product-subheading">
+            <span>02.1</span><h3>视频生成平台</h3><p>将多模型调用、任务管理与结果预览收拢为一个可直接体验的创作工作台。</p>
+          </div>
+          <ProjectCard
+            number="02.1"
+            eyebrow="生成视频平台 / PRODUCT"
+            title="多模型 AI 视频生成平台"
+            body="将生成方式、模型选择、素材参数、任务提交和结果预览统一到同一个工作台，降低多模型创作的切换成本。"
+            details={[
+              '把不同模型的调用方式收拢到同一套创作入口。',
+              '围绕任务提交、状态管理和结果预览组织产品流程。',
+              '通过操作录屏展示从输入参数到成片交付的完整路径。',
+            ]}
+            video={platformDemo}
+            href="https://prompt-video-studio.netlify.app/"
+            linkLabel="在线体验平台"
+            tags={['多模型调用', '任务管理', '参数编排', '成片预览']}
+          />
+        </div>
+        <div className="product-block" id="workflow">
+          <div className="subsection-heading product-subheading">
+            <span>02.2</span><h3>Coze 工作流</h3><p>将历史人物一生视频生成拆解为清晰、可复用、可调试的内容生产流程。</p>
+          </div>
+          <WorkflowCase />
+        </div>
+      </div>
+    </Chapter>
+  );
+}
+
+function WorkflowCase() {
+  const steps = ['人物名称输入', '生平文案与标题', '画面提示词', '批量生成图像', '视频与时间线', '字幕 / 音频 / 草稿'];
+  return (
+    <article className="systems-case workflow-case">
+        <div className="system-copy">
+          <p className="case-index">02.2 / Coze WORKFLOW</p>
+          <h3>把一个人物名称，推进成一条可交付的视频。</h3>
+          <p>这条 Coze 工作流从历史人物名称开始，先生成生平文案与标题，再把关键事件转换为画面提示词，批量完成图像、视频和后期交付数据的生成。</p>
+          <p>视频中展示的是一条完整的可复用链路：前段负责内容拆解与视觉生成，后段继续处理视频链接、时间线、字幕、标题、配乐和剪映草稿，减少重复配置与人工搬运。</p>
+          <dl>
+            <div><dt>输入</dt><dd>历史人物名称与生成要求</dd></div>
+            <div><dt>处理</dt><dd>文案、提示词、图像、视频、时间线与音频节点</dd></div>
+            <div><dt>输出</dt><dd>含字幕、标题和配乐的剪映草稿数据</dd></div>
+          </dl>
+        </div>
+        <div className="flow-proof">
+          {steps.map((item, index) => (
+            <React.Fragment key={item}>
+              <div className="workflow-node"><b>{String(index + 1).padStart(2, '0')}</b>{item}</div>
+              {index < steps.length - 1 && <span>→</span>}
+            </React.Fragment>
+          ))}
+        </div>
+        <div className="workflow-video">
+          <div className="workflow-video-meta">
+            <span>WORKFLOW DEMO / 介绍视频</span>
+            <strong>历史人物一生视频生成 · 节点配置与成片交付</strong>
+          </div>
+          <video controls playsInline preload="metadata" src={workflowDemo} aria-label="Coze 历史人物一生视频生成工作流介绍视频" />
+        </div>
+        <a className="text-link workflow-link" href="https://ca3349f30c854ab4aae0763bc14aaec2.sh1.agentos-app.net/" target="_blank" rel="noreferrer">打开 Coze 工作流 <ExternalLink size={15} /></a>
+    </article>
+  );
+}
+
+function GamesWork() {
+  return (
+    <Chapter id="games" number="03" title="互动作品" proof="一个可直接打开体验的网页冒险项目，展示探索路径、文本反馈和页面交互。" icon={Gamepad2}>
+      <div className="project-grid game-grid">
+        <ProjectCard
+          id="pokemon-game"
+          number="03.1"
+          eyebrow="网页游戏 / ADVENTURE"
+          title="宝可梦冒险"
+          body="一个可以直接打开体验的网页冒险项目，作为互动作品入口展示游戏探索与页面体验。"
+          details={[
+            '以网页交互承载探索路径、文本反馈和作品入口。',
+            '重点展示从半成品问题定位到可运行体验的工程过程。',
+          ]}
+          href="https://yunfen32.github.io/pka-adventure/"
+          linkLabel="在线体验宝可梦游戏"
+          tags={['网页冒险', '在线体验', '互动作品']}
+        />
+      </div>
+    </Chapter>
+  );
+}
+
+function CapabilityWork() {
+  return (
+    <Chapter id="capability" number="04" title="能力资产" proof="把 AI 工具、工程能力和可复用 Skill 整理成可查看、可下载、可继续扩展的工作资产。" icon={Map}>
+      <div className="capability-layout">
+        <article className="capability-map intro-3d-card" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
+          <div className="capability-map-heading">
+            <div>
+              <p className="capability-priority">核心能力模块</p>
+              <p className="case-index">04.4 / CORE CAPABILITY MAP</p>
+              <h3>能力地图 · 核心中枢</h3>
+            </div>
+            <p className="capability-map-lede">这是整个作品集的能力总览，整理 Claude Code、Codex 与 WorkBuddy 三个方向的工具能力、工作流经验和能力边界。</p>
+          </div>
+          <div className="capability-map-art">
+            <img src={capabilityMapImage} alt="Obsidian 关系图谱，展示 AI 工具、项目、工作流与能力标签之间的关联" />
+            <span>OBSIDIAN / 关系图谱</span>
+          </div>
+          <div className="capability-copy">
+            <p className="capability-copy-label">能力关系 / WORKING MODEL</p>
+            <p>从工具协作到工作流落地，能力地图帮助你快速理解我如何选择工具、拆解任务并把创意推进到可运行的结果。</p>
+            <div className="capability-facts">
+              <div><span>工具层</span><strong>Claude Code / Codex / WorkBuddy</strong></div>
+              <div><span>工作层</span><strong>工具选择 / 任务拆解 / 工作流落地</strong></div>
+            </div>
+            <a className="text-link" href="https://1473cc4f190c4a97bbf1463a8b7db92a.bj8.agentos-app.net/" target="_blank" rel="noreferrer">查看能力地图 <ExternalLink size={15} /></a>
+          </div>
+        </article>
+        <div className="skill-grid">
+          <article className="systems-case skill-case skill-case-script intro-3d-card" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
+            <div className="skill-preview"><img src={skillOverview} alt="script-image-search Skill 功能总览" /></div>
+            <div className="system-copy">
+              <p className="case-index">04.1 / 自制 Skill</p>
+              <h3>script-image-search</h3>
+              <p>一个脚本驱动的图片检索 Skill，用于将图片检索流程整理成可调用、可复用的工具。它把查询、结果整理和素材落盘收拢为一套可重复使用的操作流程。</p>
+              <video className="skill-video" controls playsInline preload="metadata" src={skillDemo} aria-label="script-image-search Skill 演示视频" />
+              <a className="text-link" href={skillDownload} download><Download size={15} /> 下载 Skill</a>
+            </div>
+          </article>
+          <article className="systems-case skill-case skill-case-github intro-3d-card skill-case-no-video" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
+            <div className="skill-preview"><img src={githubSkillOverview} alt="github-skill-cn-import Skill 功能总览" /></div>
+            <div className="system-copy">
+              <p className="case-index">04.2 / 自制 Skill</p>
+              <h3>github-skill-cn-import</h3>
+              <p>将 GitHub 上的 Skill 介绍与使用说明转换为中文，再导入本地 Skill 生态，形成可复用的本地化导入流程。这个 Skill 用于降低外部工具进入本地工作流时的理解和接入成本。</p>
+              <a className="text-link" href={githubSkillDownload} download><Download size={15} /> 下载 Skill</a>
+            </div>
+          </article>
+          <article className="systems-case skill-case skill-case-socratic intro-3d-card skill-case-no-video" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
+            <div className="skill-preview"><img src={socraticSkillOverview} alt="苏格拉底式深度学习引擎功能总览" /></div>
+            <div className="system-copy">
+              <p className="case-index">04.3 / 自制 Skill</p>
+              <h3>苏格拉底式深度学习引擎</h3>
+              <p>以提问而非直接讲解推进学习：通过主动回忆、认知冲突、反例、迁移与间隔复习，帮助学习者建立、修正并沉淀自己的知识理解。</p>
+              <a className="text-link" href={socraticSkillDownload} download><Download size={15} /> 下载 Skill</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </Chapter>
+  );
+}
+
+function Contact() {
+  return (
+    <section id="contact" className="contact-section">
+      <div className="contact-visual">
+        <span className="contact-orbit contact-orbit-one" aria-hidden="true" />
+        <span className="contact-orbit contact-orbit-two" aria-hidden="true" />
+        <div className="contact-number">05</div>
+      </div>
+      <div className="contact-content">
+        <p className="eyebrow">联系 / CONTACT</p>
+        <h2>这就是我的个人作品集网站，感谢您耐心看到这里</h2>
+        <div className="contact-actions">
+          <p>微信：By2842909989<br />QQ 邮箱：<a href="mailto:2842909989@qq.com">2842909989@qq.com</a></p>
+          <a className="button button-solid" href="mailto:2842909989@qq.com"><Mail size={16} /> 发送邮件</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ImageDialog({ image, onClose }) {
+  useEffect(() => {
+    const onKeyDown = (event) => event.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="image-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-label={image.label}
+      onMouseDown={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+    >
+      <motion.div
+        className="dialog-panel"
+        onMouseDown={(event) => event.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.98, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.98, y: 6 }}
+        transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+      >
+        <button className="dialog-close" type="button" onClick={onClose} aria-label="关闭图片预览"><X size={18} /></button>
+        <img src={image.src} alt={`${image.label}：${image.note}`} />
+        <div><span>{image.label}</span><p>{image.note}</p></div>
+      </motion.div>
+    </motion.div>
   );
 }
 

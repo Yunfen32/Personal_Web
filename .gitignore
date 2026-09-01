@@ -1,7 +1,8 @@
 node_modules/
 dist/
 .netlify/
+.netlify-anonymous-config/
 
 # Local source materials and large media assets are not part of the web app bundle.
-个人网站素材/
-。/
+素材归档/
+素材投放目录/

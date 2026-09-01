@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>能力地图 | 白榆</title>
+    <style>
+      :root { color-scheme: dark; --ink: #101116; --blue: #11196f; --cream: #f1e6bd; --orange: #f47b20; --line: rgba(241, 230, 189, .28); }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-width: 320px; color: var(--cream); background: var(--ink); font-family: Arial, "Microsoft YaHei", sans-serif; }
+      main { width: min(1180px, calc(100% - 36px)); margin: 0 auto; padding: 54px 0 90px; }
+      a { color: inherit; }
+      .top { display: flex; justify-content: space-between; gap: 24px; align-items: baseline; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+      .kicker { color: var(--orange); font-size: 11px; letter-spacing: .18em; }
+      .back { font-size: 12px; }
+      h1 { max-width: 760px; margin: 74px 0 18px; font-family: Georgia, serif; font-size: clamp(48px, 8vw, 104px); font-weight: 400; line-height: .92; }
+      .intro { max-width: 660px; color: rgba(241,230,189,.7); font-size: 14px; line-height: 1.9; }
+      .map { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 62px; padding: 28px; overflow: hidden; border: 1px solid var(--line); background: var(--blue); perspective: 1000px; }
+      .map::before, .map::after { position: absolute; content: ""; border: 1px dashed rgba(241,230,189,.3); border-radius: 50%; pointer-events: none; }
+      .map::before { inset: 12% 19%; transform: rotate(-12deg); }
+      .map::after { inset: 25% 31%; transform: rotate(20deg); }
+      .node { position: relative; z-index: 1; min-height: 170px; padding: 20px; border: 1px solid rgba(241,230,189,.45); background: rgba(16,17,22,.38); transform: translateZ(0); transition: transform 220ms ease, background 220ms ease; }
+      .node:hover { background: var(--cream); color: var(--blue); transform: translateZ(24px) rotateX(2deg) rotateY(-2deg); }
+      .node b { display: block; margin-bottom: 36px; color: var(--orange); font-family: Georgia, serif; font-size: 22px; font-weight: 400; }
+      .node h2 { margin: 0 0 10px; font-size: 18px; }
+      .node p { margin: 0; font-size: 12px; line-height: 1.7; opacity: .72; }
+      .sources { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+      .source { padding: 16px 18px; border-top: 1px solid var(--line); color: rgba(241,230,189,.78); font-size: 12px; line-height: 1.6; text-decoration: none; }
+      .source:hover { color: var(--orange); }
+      @media (max-width: 760px) { main { padding-top: 28px; } .top { align-items: flex-start; } h1 { margin-top: 54px; } .map, .sources { grid-template-columns: 1fr; } .map { padding: 16px; } .node { min-height: 130px; } .node b { margin-bottom: 22px; } }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } .node:hover { transform: none; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="top"><span class="kicker">CAPABILITY MAP / 2026</span><a class="back" href="./">返回个人网站 ↗</a></div>
+      <h1>能力地图</h1>
+      <p class="intro">这份地图整理 Claude Code、Codex 与 WorkBuddy 在本地开发、工具集成、Skill 使用和远程协作中的能力边界，来源于个人工作记录与项目实践。</p>
+      <section class="map" aria-label="能力地图节点">
+        <article class="node"><b>01</b><h2>Claude Code</h2><p>本地项目开发、代码修改、调试、测试与工程化交付。</p></article>
+        <article class="node"><b>02</b><h2>Codex</h2><p>多智能体协作、工具选择、能力地图、浏览器验证与增量实现。</p></article>
+        <article class="node"><b>03</b><h2>WorkBuddy</h2><p>远程办公、文件管理、自动化任务与记忆知识管理。</p></article>
+      </section>
+      <div class="sources">
+        <a class="source" href="ability-map/claude-code.md">阅读 Claude Code 文档 ↗</a>
+        <a class="source" href="ability-map/codex-capability-map.md">阅读 Codex 能力地图 ↗</a>
+        <a class="source" href="ability-map/workbuddy.md">阅读 WorkBuddy 文档 ↗</a>
+      </div>
+    </main>
+  </body>
+</html>
