@@ -447,16 +447,16 @@ function ProductWork() {
             number="03.1"
             eyebrow="生成视频平台 / PRODUCT"
             title="多模型 AI 视频生成工作台"
-            body="将生成方式、模型选择、素材参数、任务提交和结果预览统一到同一个工作台，降低多模型创作的切换成本。"
+            body="一个基于 React、Vite 和 Node.js 的 AI 图片/视频创作工作台：从灵感输入、模型选择、媒体生成到任务追踪、项目管理和素材归档，统一在一套可运行界面中。"
             details={[
-              '把不同模型的调用方式收拢到同一套创作入口。',
-              '围绕任务提交、状态管理和结果预览组织产品流程。',
-              '通过操作录屏展示从输入参数到成片交付的完整路径。',
+              '图片支持文生图、参考图编辑和批量生成；视频支持文生视频、首尾帧、多关键帧、参考图、续写、编辑和动作迁移等工作流。',
+              '用统一模型能力配置动态控制比例、时长、清晰度、音频和参考帧参数，服务端负责参数校验、限流和多供应商协议转换。',
+              '规则式创作 Agent 将描述拆成可审核计划；任务统一跟踪并可恢复，生成结果进入资产库，保留项目、镜头和历史版本关系。',
             ]}
             video={platformDemo}
             href="https://prompt-video-studio.netlify.app/"
-            linkLabel="在线体验平台"
-            tags={['多模型调用', '任务管理', '参数编排', '成片预览']}
+            linkLabel="在线体验工作台"
+            tags={['图片+视频双工作流', '多供应商适配', '创作 Agent', '任务恢复', '资产版本管理']}
           />
         </div>
         <div className="product-block" id="agent-files-visualizer">
@@ -527,21 +527,22 @@ function WorkflowCase() {
 
 function GamesWork() {
   return (
-    <Chapter id="games" number="02" title="互动作品" proof="一个可直接打开体验的网页冒险项目，展示探索路径、文本反馈和页面交互。" icon={Gamepad2}>
+    <Chapter id="games" number="02" title="互动作品" proof="让玩家用自然语言推动连续剧情，把 AI 叙事、世界状态和可验证的游戏规则组合成可持续推进的网页冒险。" icon={Gamepad2}>
       <div className="project-grid game-grid">
         <ProjectCard
           id="pokemon-game"
           number="02.1"
           eyebrow="网页游戏 / ADVENTURE"
           title="宝可梦冒险"
-          body="一个可以直接打开体验的网页冒险项目，作为互动作品入口展示游戏探索与页面体验。"
+          body="一款规则约束型 AI 连续叙事游戏：玩家用自然语言描述行动，AI 续写剧情并给出选择，程序规则层负责校验事实、维护世界状态和保存进度。"
           details={[
-            '以网页交互承载探索路径、文本反馈和作品入口。',
-            '重点展示从半成品问题定位到可运行体验的工程过程。',
+            '自由输入行动或选择后续选项，系统结合世界观、角色状态、分层记忆与最近剧情生成连贯冒险。',
+            'AI 只能提出事件建议；地点、人物、宝可梦、物品和世界变化必须有正文证据并通过规则校验，避免剧情随意改写。',
+            '文字剧情优先展示，漫画插图后台异步生成并缓存到 IndexedDB；支持三槽存档、PWA 离线访问、JSON 导入导出与 Android 封装。',
           ]}
           href="https://yunfen32.github.io/pka-adventure/"
           linkLabel="在线体验宝可梦游戏"
-          tags={['网页冒险', '在线体验', '互动作品']}
+          tags={['AI 连续叙事', '自然语言行动', '规则约束', '分层记忆', 'PWA / Android']}
         />
       </div>
     </Chapter>
