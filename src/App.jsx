@@ -65,8 +65,8 @@ function App() {
       <div className="site-shell">
         <Hero />
         <VisualWork onSelectImage={setSelectedImage} />
-        <ProductWork />
         <GamesWork />
+        <ProductWork />
         <CapabilityWork />
         <Contact />
       </div>
@@ -207,14 +207,14 @@ function Hero() {
             <span><strong>AI 视觉</strong><small>短剧 / 图片</small></span>
             <ArrowUpRight size={15} />
           </a>
-          <a href="#product" className="hero-path">
+          <a href="#games" className="hero-path">
             <span className="hero-path-number">02</span>
-            <span><strong>产品流程</strong><small>平台 / Coze 工作流</small></span>
+            <span><strong>互动作品</strong><small>宝可梦游戏</small></span>
             <ArrowUpRight size={15} />
           </a>
-          <a href="#games" className="hero-path">
+          <a href="#product" className="hero-path">
             <span className="hero-path-number">03</span>
-            <span><strong>互动作品</strong><small>网页游戏 / 竖屏玩法</small></span>
+            <span><strong>产品流程</strong><small>工作台 / Agent / Coze</small></span>
             <ArrowUpRight size={15} />
           </a>
           <a href="#capability" className="hero-path">
@@ -432,7 +432,7 @@ function ProductWork() {
   return (
     <Chapter
       id="product"
-      number="02"
+      number="03"
       title="产品与工作流"
       proof="从可体验的生成平台，到可复用的内容生产链路：把创作能力组织成可运行、可交付的流程。"
       icon={MonitorPlay}
@@ -441,12 +441,12 @@ function ProductWork() {
       <div className="product-stack">
         <div className="product-block" id="video-platform">
           <div className="subsection-heading product-subheading">
-            <span>02.1</span><h3>视频生成平台</h3><p>将多模型调用、任务管理与结果预览收拢为一个可直接体验的创作工作台。</p>
+            <span>03.1</span><h3>视频生成工作台</h3><p>将多模型调用、任务管理与结果预览收拢为一个可直接体验的创作工作台。</p>
           </div>
           <ProjectCard
-            number="02.1"
+            number="03.1"
             eyebrow="生成视频平台 / PRODUCT"
-            title="多模型 AI 视频生成平台"
+            title="多模型 AI 视频生成工作台"
             body="将生成方式、模型选择、素材参数、任务提交和结果预览统一到同一个工作台，降低多模型创作的切换成本。"
             details={[
               '把不同模型的调用方式收拢到同一套创作入口。',
@@ -459,19 +459,13 @@ function ProductWork() {
             tags={['多模型调用', '任务管理', '参数编排', '成片预览']}
           />
         </div>
-        <div className="product-block" id="workflow">
-          <div className="subsection-heading product-subheading">
-            <span>02.2</span><h3>Coze 工作流</h3><p>将历史人物一生视频生成拆解为清晰、可复用、可调试的内容生产流程。</p>
-          </div>
-          <WorkflowCase />
-        </div>
         <div className="product-block" id="agent-files-visualizer">
           <div className="subsection-heading product-subheading">
-            <span>02.3</span><h3>Agent 文件可视化系统</h3><p>把 AI 客户端的磁盘足迹、风险判断与可逆清理组织成一个可分享的本地工具。</p>
+            <span>03.2</span><h3>Agent 文件可视化网站</h3><p>把 AI 客户端的磁盘足迹、风险判断与可逆清理组织成一个可分享的本地工具。</p>
           </div>
           <ProjectCard
             id="agent-files-visualizer-case"
-            number="02.3"
+            number="03.2"
             eyebrow="本地工具 / SECURITY ENGINEERING"
             title="AI 客户端磁盘足迹可视化与安全清理工具"
             body="自动探测 WorkBuddy、Claude Code、Codex 的数据根，按「可删 / 谨慎 / 严禁」标注风险；删除只进系统回收站，受保护路径由服务端强制拦截。"
@@ -481,9 +475,15 @@ function ProductWork() {
               '保留本地实时服务，同时把虚构快照烘焙为纯静态只读分享版，公开链接不暴露本机真实结构。',
             ]}
             href="https://ce13dd19d34a46128128d047c40e606a.app.workbuddy.link"
-            linkLabel="打开 Agent 文件可视化系统"
+            linkLabel="打开 Agent 文件可视化网站"
             tags={['安全工程', 'agent-aware', '零依赖', '可逆清理', '静态分享']}
           />
+        </div>
+        <div className="product-block" id="workflow">
+          <div className="subsection-heading product-subheading">
+            <span>03.3</span><h3>Coze 工作流</h3><p>将历史人物一生视频生成拆解为清晰、可复用、可调试的内容生产流程。</p>
+          </div>
+          <WorkflowCase />
         </div>
       </div>
     </Chapter>
@@ -495,7 +495,7 @@ function WorkflowCase() {
   return (
     <article className="systems-case workflow-case">
         <div className="system-copy">
-          <p className="case-index">02.2 / Coze WORKFLOW</p>
+          <p className="case-index">03.3 / Coze WORKFLOW</p>
           <h3>把一个人物名称，推进成一条可交付的视频。</h3>
           <p>这条 Coze 工作流从历史人物名称开始，先生成生平文案与标题，再把关键事件转换为画面提示词，批量完成图像、视频和后期交付数据的生成。</p>
           <p>视频中展示的是一条完整的可复用链路：前段负责内容拆解与视觉生成，后段继续处理视频链接、时间线、字幕、标题、配乐和剪映草稿，减少重复配置与人工搬运。</p>
@@ -527,11 +527,11 @@ function WorkflowCase() {
 
 function GamesWork() {
   return (
-    <Chapter id="games" number="03" title="互动作品" proof="一个可直接打开体验的网页冒险项目，展示探索路径、文本反馈和页面交互。" icon={Gamepad2}>
+    <Chapter id="games" number="02" title="互动作品" proof="一个可直接打开体验的网页冒险项目，展示探索路径、文本反馈和页面交互。" icon={Gamepad2}>
       <div className="project-grid game-grid">
         <ProjectCard
           id="pokemon-game"
-          number="03.1"
+          number="02.1"
           eyebrow="网页游戏 / ADVENTURE"
           title="宝可梦冒险"
           body="一个可以直接打开体验的网页冒险项目，作为互动作品入口展示游戏探索与页面体验。"
