@@ -465,6 +465,26 @@ function ProductWork() {
           </div>
           <WorkflowCase />
         </div>
+        <div className="product-block" id="agent-files-visualizer">
+          <div className="subsection-heading product-subheading">
+            <span>02.3</span><h3>Agent 文件可视化系统</h3><p>把 AI 客户端的磁盘足迹、风险判断与可逆清理组织成一个可分享的本地工具。</p>
+          </div>
+          <ProjectCard
+            id="agent-files-visualizer-case"
+            number="02.3"
+            eyebrow="本地工具 / SECURITY ENGINEERING"
+            title="AI 客户端磁盘足迹可视化与安全清理工具"
+            body="自动探测 WorkBuddy、Claude Code、Codex 的数据根，按「可删 / 谨慎 / 严禁」标注风险；删除只进系统回收站，受保护路径由服务端强制拦截。"
+            details={[
+              '用 agent-aware 宿主识别和递归浏览，把分散的客户端数据汇总成可下钻的清单。',
+              '通过 path.relative 根锚定、Origin + 自定义头校验和 fail-closed 回收站链路，完成路径穿越与 CSRF 的实证修复。',
+              '保留本地实时服务，同时把虚构快照烘焙为纯静态只读分享版，公开链接不暴露本机真实结构。',
+            ]}
+            href="https://ce13dd19d34a46128128d047c40e606a.app.workbuddy.link"
+            linkLabel="打开 Agent 文件可视化系统"
+            tags={['安全工程', 'agent-aware', '零依赖', '可逆清理', '静态分享']}
+          />
+        </div>
       </div>
     </Chapter>
   );
