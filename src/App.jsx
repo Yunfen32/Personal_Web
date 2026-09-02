@@ -15,7 +15,8 @@ import {
 import dramaOne from './assets/01-ai-drama/videos/ai-drama-sample-01.mp4';
 import dramaTwo from './assets/01-ai-drama/videos/ai-drama-sample-02.mp4';
 import dramaThree from './assets/01-ai-drama/videos/ai-drama-sample-03.mp4';
-import platformDemo from './assets/05-video-platform/videos/video-platform-demo-web.mp4';
+import platformCover from './assets/05-video-platform/covers/video-platform-demo.webp';
+import pokemonDemo from './assets/06-games/videos/promo-quick-vertical.mp4';
 import workflowDemo from './assets/03-workflow/videos/介绍视频.mp4';
 import capabilityMapImage from './assets/capability-map/obsidian-relationship-graph.png';
 import skillDemo from './assets/04-skills/script-image-search/videos/skill-demo-web.mp4';
@@ -194,7 +195,7 @@ function Hero() {
           把一次灵感变成可体验、可交付、可复用的完整作品。
         </p>
         <div className="actions">
-          <a className="button button-solid" href="https://prompt-video-studio.netlify.app/" target="_blank" rel="noreferrer">
+          <a className="button button-solid" href="https://github.com/Yunfen32/short-video-studio" target="_blank" rel="noreferrer">
             体验视频平台 <ArrowUpRight size={16} />
           </a>
           <a className="button" href="#visual">
@@ -335,11 +336,11 @@ function resetTilt(event) {
   event.currentTarget.style.setProperty('--shine-y', '50%');
 }
 
-function ProjectCard({ id, number, eyebrow, title, body, details = [], video, href, linkLabel, tags, portrait = false, reverse = false }) {
+function ProjectCard({ id, number, eyebrow, title, body, details = [], video, image, href, linkLabel, tags, portrait = false, reverse = false }) {
   return (
     <article
       id={id}
-      className={`project-card intro-3d-card ${portrait ? 'project-card-portrait' : ''} ${reverse ? 'project-card-reverse' : ''} ${video ? '' : 'project-card-no-media'}`}
+      className={`project-card intro-3d-card ${portrait ? 'project-card-portrait' : ''} ${reverse ? 'project-card-reverse' : ''} ${video || image ? '' : 'project-card-no-media'}`}
       onPointerMove={handleTiltMove}
       onPointerLeave={resetTilt}
     >
@@ -362,7 +363,11 @@ function ProjectCard({ id, number, eyebrow, title, body, details = [], video, hr
           </a>
         ) : <span className="link-placeholder">链接待补充</span>}
       </div>
-      {video && <div className="project-media"><video controls playsInline preload="metadata" src={video} aria-label={`${title}视频介绍`} /></div>}
+      {(video || image) && (
+        <div className="project-media">
+          {video ? <video controls playsInline preload="metadata" src={video} aria-label={`${title}视频介绍`} /> : <img src={image} alt={`${title}首页截图`} />}
+        </div>
+      )}
     </article>
   );
 }
@@ -453,8 +458,8 @@ function ProductWork() {
               '用统一模型能力配置动态控制比例、时长、清晰度、音频和参考帧参数，服务端负责参数校验、限流和多供应商协议转换。',
               '规则式创作 Agent 将描述拆成可审核计划；任务统一跟踪并可恢复，生成结果进入资产库，保留项目、镜头和历史版本关系。',
             ]}
-            video={platformDemo}
-            href="https://prompt-video-studio.netlify.app/"
+            image={platformCover}
+            href="https://github.com/Yunfen32/short-video-studio"
             linkLabel="在线体验工作台"
             tags={['图片+视频双工作流', '多供应商适配', '创作 Agent', '任务恢复', '资产版本管理']}
           />
@@ -540,9 +545,11 @@ function GamesWork() {
             'AI 只能提出事件建议；地点、人物、宝可梦、物品和世界变化必须有正文证据并通过规则校验，避免剧情随意改写。',
             '文字剧情优先展示，漫画插图后台异步生成并缓存到 IndexedDB；支持三槽存档、PWA 离线访问、JSON 导入导出与 Android 封装。',
           ]}
+          video={pokemonDemo}
           href="https://yunfen32.github.io/pka-adventure/"
           linkLabel="在线体验宝可梦游戏"
           tags={['AI 连续叙事', '自然语言行动', '规则约束', '分层记忆', 'PWA / Android']}
+          portrait
         />
       </div>
     </Chapter>

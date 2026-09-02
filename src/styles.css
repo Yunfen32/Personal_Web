@@ -3559,6 +3559,14 @@ dd {
   max-height: 430px;
 }
 
+.project-media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--ink);
+}
+
 .project-card-portrait .project-media video {
   width: min(100%, 300px);
   max-height: 520px;
@@ -3974,5 +3982,178 @@ dd {
 
   .skill-grid .skill-case:not(.skill-case-socratic) .skill-preview img {
     max-height: 170px;
+  }
+}
+
+/* Skill 展示采用一张主卡加两张辅助卡，先建立层级，再保留每张卡的完整说明。 */
+.capability-layout .skill-grid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 30px);
+  align-items: stretch;
+}
+
+.capability-layout .skill-grid .skill-case {
+  min-width: 0;
+  overflow: hidden;
+  border-color: rgba(16, 17, 22, 0.18);
+  box-shadow: 0 16px 34px rgba(16, 17, 22, 0.1);
+}
+
+.capability-layout .skill-grid .skill-case-socratic {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-areas: "preview copy";
+  min-height: clamp(380px, 36vw, 520px);
+}
+
+.capability-layout .skill-grid .skill-case-socratic .skill-preview {
+  grid-area: preview;
+  min-height: 100%;
+  padding: clamp(20px, 3vw, 38px);
+  border-right: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.capability-layout .skill-grid .skill-case-socratic .skill-preview img {
+  max-height: 520px;
+}
+
+.capability-layout .skill-grid .skill-case-socratic .system-copy {
+  grid-area: copy;
+}
+
+.capability-layout .skill-grid .skill-case:not(.skill-case-socratic) {
+  grid-column: span 6;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.capability-layout .skill-grid .skill-case:not(.skill-case-socratic) .skill-preview {
+  min-height: clamp(170px, 16vw, 220px);
+  padding: clamp(14px, 2vw, 22px);
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.capability-layout .skill-grid .skill-case:not(.skill-case-socratic) .skill-preview img {
+  width: 100%;
+  max-width: 560px;
+  max-height: 220px;
+}
+
+.capability-layout .skill-grid .skill-case.skill-case-script {
+  grid-column: span 7;
+  grid-template-columns: minmax(180px, 0.72fr) minmax(0, 1.28fr);
+  grid-template-rows: 1fr;
+}
+
+.capability-layout .skill-grid .skill-case-script .skill-preview {
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 100%;
+  border-right: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.capability-layout .skill-grid .skill-case-script .system-copy {
+  grid-column: 2;
+  grid-row: 1;
+  padding: clamp(22px, 2.6vw, 34px);
+}
+
+.capability-layout .skill-grid .skill-case-script .system-copy h3 {
+  font-size: clamp(24px, 2.4vw, 34px);
+}
+
+.capability-layout .skill-grid .skill-case-script .skill-video {
+  margin-top: 18px;
+  aspect-ratio: 16 / 10;
+}
+
+.capability-layout .skill-grid .skill-case-github {
+  grid-column: span 5;
+}
+
+.capability-layout .skill-grid .system-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.capability-layout .skill-grid .system-copy h3 {
+  max-width: 15em;
+}
+
+.capability-layout .skill-grid .system-copy > .text-link {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.capability-layout .skill-grid .skill-video {
+  margin-top: 20px;
+}
+
+@media (max-width: 980px) {
+  .capability-layout .skill-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic,
+  .capability-layout .skill-grid .skill-case:not(.skill-case-socratic) {
+    grid-column: auto;
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic {
+    grid-template-columns: 1fr;
+    grid-template-areas: "preview" "copy";
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic .skill-preview {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .capability-layout .skill-grid .skill-case:not(.skill-case-socratic) {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: 1fr;
+  }
+
+  .capability-layout .skill-grid .skill-case.skill-case-script {
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .capability-layout .skill-grid .skill-case:not(.skill-case-socratic) .skill-preview {
+    min-height: 0;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+
+  .capability-layout .skill-grid .skill-case-script .skill-preview {
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .capability-layout .skill-grid {
+    gap: 20px;
+  }
+
+  .capability-layout .skill-grid .skill-case:not(.skill-case-socratic) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .capability-layout .skill-grid .skill-case:not(.skill-case-socratic) .skill-preview {
+    min-height: 180px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .capability-layout .skill-grid .system-copy {
+    padding: 24px 20px 26px;
   }
 }
