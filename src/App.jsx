@@ -576,10 +576,19 @@ function CapabilityWork() {
           </div>
         </article>
         <div className="skill-grid">
+          <article className="systems-case skill-case skill-case-socratic intro-3d-card" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
+            <div className="skill-preview"><img src={socraticSkillOverview} alt="苏格拉底式深度学习引擎功能总览" /></div>
+            <div className="system-copy">
+              <p className="case-index">04.1 / 自制 Skill</p>
+              <h3>苏格拉底式深度学习引擎</h3>
+              <p>以提问而非直接讲解推进学习：通过主动回忆、认知冲突、反例、迁移与间隔复习，帮助学习者建立、修正并沉淀自己的知识理解。</p>
+              <a className="text-link" href={socraticSkillDownload} download><Download size={15} /> 下载 Skill</a>
+            </div>
+          </article>
           <article className="systems-case skill-case skill-case-script intro-3d-card" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
             <div className="skill-preview"><img src={skillOverview} alt="script-image-search Skill 功能总览" /></div>
             <div className="system-copy">
-              <p className="case-index">04.1 / 自制 Skill</p>
+              <p className="case-index">04.2 / 自制 Skill</p>
               <h3>script-image-search</h3>
               <p>一个脚本驱动的图片检索 Skill，用于将图片检索流程整理成可调用、可复用的工具。它把查询、结果整理和素材落盘收拢为一套可重复使用的操作流程。</p>
               <video className="skill-video" controls playsInline preload="metadata" src={skillDemo} aria-label="script-image-search Skill 演示视频" />
@@ -589,19 +598,10 @@ function CapabilityWork() {
           <article className="systems-case skill-case skill-case-github intro-3d-card skill-case-no-video" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
             <div className="skill-preview"><img src={githubSkillOverview} alt="github-skill-cn-import Skill 功能总览" /></div>
             <div className="system-copy">
-              <p className="case-index">04.2 / 自制 Skill</p>
+              <p className="case-index">04.3 / 自制 Skill</p>
               <h3>github-skill-cn-import</h3>
               <p>将 GitHub 上的 Skill 介绍与使用说明转换为中文，再导入本地 Skill 生态，形成可复用的本地化导入流程。这个 Skill 用于降低外部工具进入本地工作流时的理解和接入成本。</p>
               <a className="text-link" href={githubSkillDownload} download><Download size={15} /> 下载 Skill</a>
-            </div>
-          </article>
-          <article className="systems-case skill-case skill-case-socratic intro-3d-card skill-case-no-video" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
-            <div className="skill-preview"><img src={socraticSkillOverview} alt="苏格拉底式深度学习引擎功能总览" /></div>
-            <div className="system-copy">
-              <p className="case-index">04.3 / 自制 Skill</p>
-              <h3>苏格拉底式深度学习引擎</h3>
-              <p>以提问而非直接讲解推进学习：通过主动回忆、认知冲突、反例、迁移与间隔复习，帮助学习者建立、修正并沉淀自己的知识理解。</p>
-              <a className="text-link" href={socraticSkillDownload} download><Download size={15} /> 下载 Skill</a>
             </div>
           </article>
         </div>
