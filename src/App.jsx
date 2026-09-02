@@ -590,7 +590,13 @@ function CapabilityWork() {
               <p className="case-index">04.1 / 自制 Skill</p>
               <h3>苏格拉底式深度学习引擎</h3>
               <p>以提问而非直接讲解推进学习：通过主动回忆、认知冲突、反例、迁移与间隔复习，帮助学习者建立、修正并沉淀自己的知识理解。</p>
-              <a className="text-link" href={socraticSkillDownload} download><Download size={15} /> 下载 Skill</a>
+              <ul className="skill-facts" aria-label="苏格拉底式深度学习引擎的学习方法">
+                <li>主动回忆</li>
+                <li>认知冲突</li>
+                <li>反例与迁移</li>
+                <li>间隔复习</li>
+              </ul>
+              <div className="skill-action"><a className="text-link" href={socraticSkillDownload} download aria-label="下载苏格拉底式深度学习引擎 Skill"><Download size={15} /> 下载 Skill</a></div>
             </div>
           </article>
           <article className="systems-case skill-case skill-case-script intro-3d-card" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
@@ -599,8 +605,13 @@ function CapabilityWork() {
               <p className="case-index">04.2 / 自制 Skill</p>
               <h3>script-image-search</h3>
               <p>一个脚本驱动的图片检索 Skill，用于将图片检索流程整理成可调用、可复用的工具。它把查询、结果整理和素材落盘收拢为一套可重复使用的操作流程。</p>
+              <ul className="skill-facts" aria-label="script-image-search 的工作流">
+                <li>图片检索</li>
+                <li>结果整理</li>
+                <li>素材落盘</li>
+              </ul>
               <video className="skill-video" controls playsInline preload="metadata" src={skillDemo} aria-label="script-image-search Skill 演示视频" />
-              <a className="text-link" href={skillDownload} download><Download size={15} /> 下载 Skill</a>
+              <div className="skill-action"><a className="text-link" href={skillDownload} download aria-label="下载 script-image-search Skill"><Download size={15} /> 下载 Skill</a></div>
             </div>
           </article>
           <article className="systems-case skill-case skill-case-github intro-3d-card skill-case-no-video" onPointerMove={handleTiltMove} onPointerLeave={resetTilt}>
@@ -609,7 +620,12 @@ function CapabilityWork() {
               <p className="case-index">04.3 / 自制 Skill</p>
               <h3>github-skill-cn-import</h3>
               <p>将 GitHub 上的 Skill 介绍与使用说明转换为中文，再导入本地 Skill 生态，形成可复用的本地化导入流程。这个 Skill 用于降低外部工具进入本地工作流时的理解和接入成本。</p>
-              <a className="text-link" href={githubSkillDownload} download><Download size={15} /> 下载 Skill</a>
+              <ul className="skill-facts" aria-label="github-skill-cn-import 的工作流">
+                <li>中文转换</li>
+                <li>本地导入</li>
+                <li>复用工作流</li>
+              </ul>
+              <div className="skill-action"><a className="text-link" href={githubSkillDownload} download aria-label="下载 github-skill-cn-import Skill"><Download size={15} /> 下载 Skill</a></div>
             </div>
           </article>
         </div>

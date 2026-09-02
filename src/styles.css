@@ -4157,3 +4157,248 @@ dd {
     padding: 24px 20px 26px;
   }
 }
+
+/* Skill 区域：一张主卡与两张互补卡共用同一套栅格和操作节奏。 */
+.capability-layout .skill-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(22px, 2.6vw, 34px);
+  align-items: stretch;
+}
+
+.capability-layout .skill-grid .skill-case {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-color: rgba(16, 17, 22, 0.2);
+  box-shadow: 0 18px 40px rgba(16, 17, 22, 0.12);
+}
+
+.capability-layout .skill-grid .skill-case-socratic {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.92fr) minmax(0, 1.08fr);
+  grid-template-areas: "preview copy";
+  min-height: clamp(450px, 39vw, 570px);
+}
+
+.capability-layout .skill-grid .skill-case-socratic .skill-preview {
+  grid-area: preview;
+  display: grid;
+  min-height: 100%;
+  padding: clamp(24px, 3.2vw, 44px);
+  place-items: center;
+  border: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  background:
+    radial-gradient(circle at 22% 18%, rgba(61, 157, 255, 0.42), transparent 34%),
+    linear-gradient(145deg, #07152f 0%, #0b3978 58%, #1d6bb2 100%);
+}
+
+.capability-layout .skill-grid .skill-case-socratic .skill-preview img {
+  width: min(100%, 440px);
+  max-height: 460px;
+  object-fit: contain;
+}
+
+.capability-layout .skill-grid .skill-case-socratic .system-copy {
+  grid-area: copy;
+}
+
+.capability-layout .skill-grid .skill-case-script {
+  grid-column: span 7;
+  display: grid;
+  grid-template-columns: minmax(190px, 0.68fr) minmax(0, 1.32fr);
+  grid-template-areas: "preview copy";
+}
+
+.capability-layout .skill-grid .skill-case.skill-case-github {
+  grid-column: span 5;
+  display: grid;
+  grid-template-rows: minmax(190px, 0.72fr) minmax(0, 1.28fr);
+  grid-template-areas: "preview" "copy";
+}
+
+.capability-layout .skill-grid .skill-case-script .skill-preview,
+.capability-layout .skill-grid .skill-case-github .skill-preview {
+  display: grid;
+  min-height: 0;
+  padding: clamp(18px, 2.1vw, 28px);
+  place-items: center;
+}
+
+.capability-layout .skill-grid .skill-case-script .skill-preview {
+  grid-area: preview;
+  border: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(145deg, #1f2aa6, #5d34d0 58%, #00aebe);
+}
+
+.capability-layout .skill-grid .skill-case-github .skill-preview {
+  grid-area: preview;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(145deg, #3b299d, #b62c96 58%, #ff6b72);
+}
+
+.capability-layout .skill-grid .skill-case-script .skill-preview img,
+.capability-layout .skill-grid .skill-case-github .skill-preview img {
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  max-height: none;
+  object-fit: contain;
+}
+
+.capability-layout .skill-grid .skill-case-script .system-copy,
+.capability-layout .skill-grid .skill-case-github .system-copy {
+  grid-area: copy;
+}
+
+.capability-layout .skill-grid .system-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(28px, 3.2vw, 46px);
+  background: rgba(255, 253, 243, 0.94);
+}
+
+.capability-layout .skill-grid .skill-case-socratic .system-copy {
+  background: linear-gradient(135deg, rgba(255, 253, 243, 0.96), rgba(203, 229, 248, 0.84));
+}
+
+.capability-layout .skill-grid .skill-case-script .system-copy {
+  background: linear-gradient(135deg, rgba(255, 253, 243, 0.96), rgba(188, 239, 231, 0.72));
+}
+
+.capability-layout .skill-grid .skill-case-github .system-copy {
+  background: linear-gradient(135deg, rgba(255, 253, 243, 0.96), rgba(234, 220, 248, 0.82));
+}
+
+.capability-layout .skill-grid .system-copy h3 {
+  max-width: 13em;
+  font-size: clamp(27px, 2.7vw, 42px);
+  line-height: 1.08;
+}
+
+.capability-layout .skill-grid .skill-case-script .system-copy h3,
+.capability-layout .skill-grid .skill-case-github .system-copy h3 {
+  font-size: clamp(24px, 2.25vw, 34px);
+}
+
+.skill-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill-facts li {
+  padding: 7px 10px;
+  border: 1px solid currentColor;
+  color: rgba(16, 17, 22, 0.66);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.skill-case-socratic .skill-facts li { color: #1764aa; }
+.skill-case-script .skill-facts li { color: #007e98; }
+.skill-case-github .skill-facts li { color: #b62c96; }
+
+.capability-layout .skill-grid .skill-video {
+  width: 100%;
+  max-height: none;
+  margin-top: 22px;
+  aspect-ratio: 16 / 10;
+  background: var(--ink);
+}
+
+.skill-action {
+  display: flex;
+  align-items: flex-end;
+  min-height: 54px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.capability-layout .skill-grid .skill-action .text-link {
+  margin: 0;
+  padding: 10px 0;
+}
+
+@media (max-width: 980px) {
+  .capability-layout .skill-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic,
+  .capability-layout .skill-grid .skill-case-script,
+  .capability-layout .skill-grid .skill-case-github {
+    grid-column: auto;
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic,
+  .capability-layout .skill-grid .skill-case-script {
+    grid-template-columns: minmax(240px, 0.82fr) minmax(0, 1.18fr);
+    grid-template-areas: "preview copy";
+    min-height: 0;
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic .skill-preview,
+  .capability-layout .skill-grid .skill-case-script .skill-preview {
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 0;
+  }
+
+  .capability-layout .skill-grid .skill-case-github {
+    grid-template-columns: minmax(240px, 0.82fr) minmax(0, 1.18fr);
+    grid-template-rows: auto;
+    grid-template-areas: "preview copy";
+  }
+
+  .capability-layout .skill-grid .skill-case-github .skill-preview {
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .capability-layout .skill-grid {
+    gap: 22px;
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic,
+  .capability-layout .skill-grid .skill-case-script,
+  .capability-layout .skill-grid .skill-case-github {
+    grid-template-columns: 1fr;
+    grid-template-areas: "preview" "copy";
+  }
+
+  .capability-layout .skill-grid .skill-preview,
+  .capability-layout .skill-grid .skill-case-socratic .skill-preview,
+  .capability-layout .skill-grid .skill-case-script .skill-preview,
+  .capability-layout .skill-grid .skill-case-github .skill-preview {
+    min-height: 200px;
+    padding: 18px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .capability-layout .skill-grid .skill-case-socratic .skill-preview img {
+    max-height: 360px;
+  }
+
+  .capability-layout .skill-grid .system-copy {
+    padding: 26px 22px 30px;
+  }
+
+  .capability-layout .skill-grid .system-copy h3,
+  .capability-layout .skill-grid .skill-case-script .system-copy h3,
+  .capability-layout .skill-grid .skill-case-github .system-copy h3 {
+    font-size: clamp(26px, 8.4vw, 36px);
+  }
+}
