@@ -195,7 +195,7 @@ function Hero() {
           把一次灵感变成可体验、可交付、可复用的完整作品。
         </p>
         <div className="actions">
-          <a className="button button-solid" href="https://github.com/Yunfen32/short-video-studio" target="_blank" rel="noreferrer">
+          <a className="button button-solid" href="https://yunfen32.github.io/short-video-studio/" target="_blank" rel="noreferrer">
             体验视频平台 <ArrowUpRight size={16} />
           </a>
           <a className="button" href="#visual">
@@ -459,7 +459,7 @@ function ProductWork() {
               '规则式创作 Agent 将描述拆成可审核计划；任务统一跟踪并可恢复，生成结果进入资产库，保留项目、镜头和历史版本关系。',
             ]}
             image={platformCover}
-            href="https://github.com/Yunfen32/short-video-studio"
+            href="https://yunfen32.github.io/short-video-studio/"
             linkLabel="在线体验工作台"
             tags={['图片+视频双工作流', '多供应商适配', '创作 Agent', '任务恢复', '资产版本管理']}
           />
