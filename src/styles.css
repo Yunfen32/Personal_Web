@@ -3906,3 +3906,73 @@ dd {
   .project-card > .project-media,
   .project-card-reverse > .project-media { order: 2; }
 }
+
+/* Skill 层级：突出第一个 Skill，其余参考图保持紧凑。 */
+.skill-grid .skill-case-socratic {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.05fr);
+  min-height: 0;
+}
+
+.skill-grid .skill-case-socratic .skill-preview {
+  order: 1;
+  min-height: 0;
+  padding: clamp(20px, 3vw, 34px);
+  border-top: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.skill-grid .skill-case-socratic .skill-preview img {
+  width: 100%;
+  max-width: 100%;
+  max-height: 560px;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.skill-grid .skill-case-socratic .system-copy {
+  order: 2;
+}
+
+.skill-grid .skill-case:not(.skill-case-socratic) .skill-preview {
+  padding: clamp(14px, 2vw, 22px);
+}
+
+.skill-grid .skill-case:not(.skill-case-socratic) .skill-preview img {
+  width: auto;
+  max-width: min(100%, 560px);
+  max-height: 220px;
+  min-height: 0;
+  object-fit: contain;
+}
+
+@media (max-width: 1100px) {
+  .skill-grid .skill-case-socratic {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-grid .skill-case-socratic .skill-preview {
+    order: 1;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .skill-grid .skill-case-socratic .system-copy {
+    order: 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .skill-grid .skill-case-socratic .skill-preview {
+    padding: 14px;
+  }
+
+  .skill-grid .skill-case-socratic .skill-preview img {
+    max-height: 360px;
+  }
+
+  .skill-grid .skill-case:not(.skill-case-socratic) .skill-preview img {
+    max-height: 170px;
+  }
+}
