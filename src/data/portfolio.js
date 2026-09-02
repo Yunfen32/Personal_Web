@@ -16,8 +16,8 @@ import gallery15 from '../assets/02-ai-images/gallery/ai-gallery-15.webp';
 
 export const sections = [
   { id: 'visual', number: '01', label: '视觉创作' },
-  { id: 'product', number: '02', label: '产品流程' },
-  { id: 'games', number: '03', label: '互动作品' },
+  { id: 'games', number: '02', label: '互动作品' },
+  { id: 'product', number: '03', label: '产品流程' },
   { id: 'capability', number: '04', label: '能力资产' },
   { id: 'contact', number: '05', label: '联系' },
 ];
