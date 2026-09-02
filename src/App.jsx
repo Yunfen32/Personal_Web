@@ -15,7 +15,7 @@ import {
 import dramaOne from './assets/01-ai-drama/videos/ai-drama-sample-01.mp4';
 import dramaTwo from './assets/01-ai-drama/videos/ai-drama-sample-02.mp4';
 import dramaThree from './assets/01-ai-drama/videos/ai-drama-sample-03.mp4';
-import platformCover from './assets/05-video-platform/covers/video-platform-demo.webp';
+import platformCover from './assets/05-video-platform/covers/platform-home.png';
 import pokemonDemo from './assets/06-games/videos/promo-quick-vertical.mp4';
 import workflowDemo from './assets/03-workflow/videos/介绍视频.mp4';
 import capabilityMapImage from './assets/capability-map/obsidian-relationship-graph.png';
